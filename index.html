@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprendiendo Python | Desafío de Codificación</title>
+
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+header {
+    background: #172554;
+    color: white;
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.header-content {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.header-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    background: white;
+    border-radius: 50%;
+    padding: 3px;
+}
+header h1 { margin: 0 0 4px; font-size: 24px; }
+header p { margin: 0; opacity: .9; }
+
+.layout {
+    display: flex;
+    min-height: calc(100vh - 82px);
+}
+.sidebar {
+    width: 285px;
+    background: white;
+    border-right: 1px solid #dbe2ea;
+    padding: 18px 12px;
+    position: sticky;
+    top: 82px;
+    height: calc(100vh - 82px);
+    overflow-y: auto;
+}
+.sidebar h3 {
+    font-size: 13px;
+    color: #64748b;
+    text-transform: uppercase;
+    margin: 12px 10px 8px;
+}
+.menu button {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    padding: 11px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #334155;
+    margin-bottom: 3px;
+}
+.menu button:hover { background: #eef2ff; }
+.menu button.active {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-weight: bold;
+}
+.check { float: right; color: #16a34a; }
+
+main {
+    flex: 1;
+    max-width: 1100px;
+    padding: 30px;
+    margin: auto;
+}
+.card {
+    background: white;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(15,23,42,.04);
+}
+.hero {
+    background: linear-gradient(135deg, #dbeafe, #eef2ff);
+    border: none;
+}
+.home-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 25px;
+    align-items: center;
+}
+.python-logo {
+    width: 240px;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+}
+.group-photo {
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+.institutional-logo {
+    width: 150px;
+    display: block;
+    margin: 0 auto 15px;
+}
+.names {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 15px 25px;
+}
+.names li { margin: 7px 0; }
+
+h2 { margin-top: 0; color: #172554; }
+h3 { color: #1e3a8a; }
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    line-height: 1.5;
+}
+.editor {
+    width: 100%;
+    min-height: 260px;
+    resize: vertical;
+    background: #0f172a;
+    color: #e2e8f0;
+    border: none;
+    border-radius: 8px;
+    padding: 18px;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+button.action {
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #2563eb;
+    color: white;
+}
+button.action.secondary {
+    background: #e2e8f0;
+    color: #172033;
+}
+button.action.success { background: #16a34a; }
+
+.inputs {
+    width: 100%;
+    min-height: 70px;
+    resize: vertical;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    padding: 10px;
+    font-family: monospace;
+}
+.console {
+    min-height: 100px;
+    background: #020617;
+    color: #86efac;
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    font-family: Consolas, monospace;
+    overflow-x: auto;
+}
+.badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.progress {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.progress-bar {
+    height: 100%;
+    background: #2563eb;
+    width: 0%;
+}
+.notice {
+    padding: 12px;
+    background: #fef3c7;
+    border-radius: 8px;
+    color: #78350f;
+}
+.info-box {
+    padding: 15px;
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 7px;
+}
+a { color: #2563eb; font-weight: bold; }
+
+@media (max-width: 850px) {
+    .layout { display: block; }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        border-right: 0;
+        border-bottom: 1px solid #dbe2ea;
+    }
+    main { padding: 15px; }
+    .home-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <img class="header-logo" src="img/logo-institucional.png" alt="Logo institucional">
+        <div>
+            <h1>Aprendiendo Python</h1>
+            <p>Desafío de Codificación: de la lógica al software</p>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar">
+    <h3>Inicio</h3>
+    <div class="menu">
+        <button id="homeButton" onclick="showHome()">🏠 Presentación</button>
+        <button id="groupButton" onclick="showGroup()">👥 Nuestro grupo</button>
+    </div>
+
+    <h3>Fundamentos</h3>
+    <div class="menu" id="lessonMenu"></div>
+
+    <h3>Retos</h3>
+    <div class="menu">
+        <button onclick="showChallenge(1)">🏆 Reto 1 — Área del rectángulo</button>
+        <button onclick="showChallenge(2)">🏆 Reto 2 — ¿Aprobado?</button>
+        <button onclick="showChallenge(3)">🏆 Reto 3 — Contador</button>
+    </div>
+
+    <h3>Progreso</h3>
+    <div id="progressText">0 de 11 completados</div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</aside>
+
+<main id="content"></main>
+
+</div>
+
+<script type="module">
+
+const lessons = [
+{
+title: "print()",
+explanation: "La función print() permite mostrar información en pantalla. Es una de las primeras instrucciones que utilizaremos en Python.",
+example: `print("Hola mundo")
+print("Estoy aprendiendo Python")`,
+exercise: "Crea un programa que muestre tu nombre, edad, ciudad y curso.",
+inputs: "",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "Variables",
+explanation: "Las variables permiten guardar información para utilizarla posteriormente. Podemos almacenar textos, números y otros datos.",
+example: `nombre = "Carlos"
+edad = 18
+
+print(nombre)
+print(edad)`,
+exercise: "Crea variables para guardar tu nombre, edad, ciudad y profesión. Después muestra todos los datos.",
+inputs: "",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "input()",
+explanation: "La función input() permite recibir información escrita por el usuario mediante el teclado.",
+example: `nombre = input("¿Cuál es tu nombre? ")
+
+print("Hola", nombre)`,
+exercise: "Pregunta al usuario su nombre y su ciudad. Después muestra un mensaje personalizado.",
+inputs: "Ana\nBogotá",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "Operaciones matemáticas",
+explanation: "Python permite realizar operaciones matemáticas utilizando +, -, * y /.",
+example: `numero1 = 10
+numero2 = 5
+
+print("Suma:", numero1 + numero2)
+print("Resta:", numero1 - numero2)
+print("Multiplicación:", numero1 * numero2)
+print("División:", numero1 / numero2)`,
+exercise: "Pide dos números al usuario y muestra la suma, resta, multiplicación y división.",
+inputs: "10\n5",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "Conversión: int() y float()",
+explanation: "La información recibida mediante input() llega como texto. Para trabajar con números podemos convertirla utilizando int() o float().",
+example: `edad = int(input("Ingrese su edad: "))
+
+print("Tiene", edad, "años")`,
+exercise: "Pide el precio de un producto y la cantidad comprada. Convierte los datos y calcula el total.",
+inputs: "2500\n3",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "if / else",
+explanation: "Estas instrucciones permiten tomar decisiones. Python ejecuta una parte del programa si se cumple una condición y otra parte si no se cumple.",
+example: `edad = int(input("Ingrese su edad: "))
+
+if edad >= 18:
+    print("Es mayor de edad")
+else:
+    print("Es menor de edad")`,
+exercise: "Pide una nota y muestra 'Estudiante aprobado' si es mayor o igual a 3.0. De lo contrario, muestra 'Estudiante reprobado'.",
+inputs: "3.5",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "if / elif / else",
+explanation: "Cuando necesitamos evaluar varias posibilidades podemos utilizar if, elif y else.",
+example: `nota = float(input("Ingrese la nota: "))
+
+if nota >= 4.5:
+    print("Superior")
+elif nota >= 4.0:
+    print("Alto")
+elif nota >= 3.0:
+    print("Básico")
+else:
+    print("Bajo")`,
+exercise: "Crea un programa que clasifique una nota en Superior, Alto, Básico o Bajo.",
+inputs: "4.2",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "while",
+explanation: "El ciclo while permite repetir instrucciones mientras una condición sea verdadera.",
+example: `contador = 1
+
+while contador <= 5:
+    print(contador)
+    contador += 1`,
+exercise: "Crea un contador que muestre los números del 1 al 10 utilizando while.",
+inputs: "",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "for",
+explanation: "El ciclo for permite repetir instrucciones una cantidad determinada de veces o recorrer una secuencia.",
+example: `for numero in range(1, 6):
+    print(numero)`,
+exercise: "Solicita un número y utiliza for para mostrar su tabla de multiplicar del 1 al 10.",
+inputs: "5",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "Listas",
+explanation: "Las listas permiten almacenar varios elementos dentro de una misma variable.",
+example: `frutas = ["Manzana", "Pera", "Banano"]
+
+for fruta in frutas:
+    print(fruta)`,
+exercise: "Crea una lista con cinco nombres de estudiantes y muestra cada nombre utilizando un ciclo for.",
+inputs: "",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+},
+{
+title: "Funciones",
+explanation: "Las funciones permiten agrupar instrucciones y reutilizarlas. Se crean utilizando la palabra def.",
+example: `def sumar(a, b):
+    resultado = a + b
+    print(resultado)
+
+sumar(10, 5)
+sumar(20, 8)
+sumar(7, 3)`,
+exercise: "Crea una función llamada sumar que reciba dos números y muestre el resultado.",
+inputs: "",
+programiz: "https://www.programiz.com/python-programming/online-compiler/"
+}
+];
+
+let currentLesson = 0;
+let completed = JSON.parse(localStorage.getItem("pythonProgress") || "[]");
+
+function renderMenu() {
+    const menu = document.getElementById("lessonMenu");
+    menu.innerHTML = "";
+
+    lessons.forEach((lesson, index) => {
+        const button = document.createElement("button");
+        button.className = index === currentLesson ? "active" : "";
+        button.innerHTML = `${index + 1}. ${lesson.title} ${completed.includes(index) ? '<span class="check">✓</span>' : ""}`;
+        button.onclick = () => showLesson(index);
+        menu.appendChild(button);
+    });
+
+    updateProgress();
+}
+
+function updateProgress() {
+    const total = lessons.length;
+    const done = completed.length;
+    document.getElementById("progressText").textContent = `${done} de ${total} completados`;
+    document.getElementById("progressBar").style.width = `${(done / total) * 100}%`;
+}
+
+function activateHomeButton(which) {
+    document.getElementById("homeButton").classList.toggle("active", which === "home");
+    document.getElementById("groupButton").classList.toggle("active", which === "group");
+}
+
+function showHome() {
+    activateHomeButton("home");
+    document.getElementById("content").innerHTML = `
+        <section class="card hero">
+            <div class="home-grid">
+                <div>
+                    <span class="badge">BIENVENIDOS</span>
+                    <h2>Aprendiendo Python desde cero</h2>
+                    <p>Esta página es una guía educativa para conocer los fundamentos de Python mediante explicaciones sencillas, ejemplos y ejercicios prácticos.</p>
+                    <p>El propósito es avanzar paso a paso: primero comprendemos la lógica, después escribimos el código y finalmente comprobamos su funcionamiento.</p>
+                </div>
+                <div>
+                    <img class="python-logo" src="https://www.python.org/static/community_logos/python-logo-master-v3-TM-flattened.png" alt="Logo oficial de Python">
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>🐍 ¿Qué es Python?</h2>
+            <p><strong>Python</strong> es un lenguaje de programación utilizado para crear programas, automatizar tareas, analizar información, desarrollar aplicaciones y construir diferentes tipos de soluciones tecnológicas.</p>
+            <p>Una de sus principales características es que su sintaxis es clara y relativamente sencilla de leer, por lo que es una buena opción para comenzar a aprender programación.</p>
+        </section>
+
+        <section class="card">
+            <h2>🧱 Fundamentos de Python</h2>
+            <p>Para aprender a programar en Python comenzaremos con algunos elementos fundamentales:</p>
+            <ul>
+                <li><strong>Mostrar información:</strong> utilizaremos <code>print()</code>.</li>
+                <li><strong>Guardar información:</strong> aprenderemos a utilizar variables.</li>
+                <li><strong>Recibir información:</strong> utilizaremos <code>input()</code>.</li>
+                <li><strong>Trabajar con números:</strong> realizaremos operaciones y conversiones.</li>
+                <li><strong>Tomar decisiones:</strong> utilizaremos <code>if</code>, <code>elif</code> y <code>else</code>.</li>
+                <li><strong>Repetir instrucciones:</strong> aprenderemos <code>while</code> y <code>for</code>.</li>
+                <li><strong>Organizar datos:</strong> utilizaremos listas.</li>
+                <li><strong>Reutilizar código:</strong> crearemos funciones.</li>
+            </ul>
+            <div class="info-box"><strong>Ruta de aprendizaje:</strong> estudia cada tema en orden, prueba los ejemplos y después intenta resolver el ejercicio por tu cuenta.</div>
+        </section>
+
+        <section class="card">
+            <h2>🚀 ¿Cómo utilizar esta página?</h2>
+            <ol>
+                <li>Selecciona un tema en el menú.</li>
+                <li>Lee la explicación.</li>
+                <li>Analiza el ejemplo.</li>
+                <li>Modifica y ejecuta el código.</li>
+                <li>Intenta resolver el ejercicio.</li>
+                <li>Marca la lección como completada.</li>
+            </ol>
+        </section>
+
+        <section class="card">
+            <h3>📚 Recursos</h3>
+            <p>Los ejemplos pueden practicarse también en el compilador online de Programiz.</p>
+            <p><a href="https://www.programiz.com/python-programming/online-compiler/" target="_blank">Abrir Programiz →</a></p>
+        </section>
+    `;
+    renderMenu();
+}
+
+function showGroup() {
+    activateHomeButton("group");
+    document.getElementById("content").innerHTML = `
+        <section class="card hero">
+            <span class="badge">NUESTRO GRUPO</span>
+            <h2>Quiénes somos</h2>
+            <p>Somos un grupo de estudiantes que trabaja de manera colaborativa para investigar, comprender y explicar los fundamentos del lenguaje de programación Python.</p>
+            <p>En este proyecto transformamos lo aprendido en una página web educativa para que otros estudiantes puedan consultar los conceptos, observar ejemplos y practicar programación.</p>
+        </section>
+
+        <section class="card">
+            <img class="institutional-logo" src="img/logo-institucional.png" alt="Logo institucional">
+            <h2 style="text-align:center;">Integrantes del grupo</h2>
+
+            <div class="names">
+                <ul>
+                    <li>Nombre del estudiante 1</li>
+                    <li>Nombre del estudiante 2</li>
+                    <li>Nombre del estudiante 3</li>
+                    <li>Nombre del estudiante 4</li>
+                    <li>Nombre del estudiante 5</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>📸 Nuestro equipo</h2>
+            <img class="group-photo" src="img/estudiantes.jpeg" alt="Fotografía del grupo de estudiantes">
+        </section>
+
+        <section class="card">
+            <h3>💻 Nuestro proyecto</h3>
+            <p>Esta página hace parte de un desafío de codificación en el que aplicamos conceptos de programación, diseño web, organización de información y trabajo colaborativo.</p>
+        </section>
+    `;
+    renderMenu();
+}
+
+function showLesson(index) {
+    currentLesson = index;
+    activateHomeButton("");
+    const lesson = lessons[index];
+
+    document.getElementById("content").innerHTML = `
+        <section class="card hero">
+            <span class="badge">LECCIÓN ${index + 1} DE ${lessons.length}</span>
+            <h2>${lesson.title}</h2>
+            <p>${lesson.explanation}</p>
+        </section>
+
+        <section class="card">
+            <h3>💡 Ejemplo</h3>
+            <pre>${escapeHtml(lesson.example)}</pre>
+        </section>
+
+        <section class="card">
+            <h3>🎯 Tu ejercicio</h3>
+            <p>${lesson.exercise}</p>
+        </section>
+
+        <section class="card">
+            <h3>💻 Prueba tu código</h3>
+
+            <label><strong>Datos de entrada</strong></label>
+            <p>Escribe un dato por línea. Se utilizarán cuando tu programa use <code>input()</code>.</p>
+            <textarea id="inputData" class="inputs" placeholder="Ejemplo:\n10\n5">${lesson.inputs}</textarea>
+
+            <br><br>
+
+            <textarea id="codeEditor" class="editor" spellcheck="false">${escapeHtml(lesson.example)}</textarea>
+
+            <div class="controls">
+                <button class="action success" id="runButton">▶ Ejecutar</button>
+                <button class="action secondary" id="restoreButton">↻ Restaurar ejemplo</button>
+                <button class="action secondary" id="copyButton">📋 Copiar código</button>
+                <button class="action secondary" id="completeButton">✓ Marcar como completada</button>
+            </div>
+
+            <h3>🖥️ Resultado</h3>
+            <div id="console" class="console">Presiona "Ejecutar" para probar tu programa.</div>
+
+            <p class="notice">La primera ejecución puede tardar unos segundos mientras se carga Python en el navegador.</p>
+        </section>
+
+        <section class="card">
+            <h3>🔗 También puedes practicar en Programiz</h3>
+            <p><a href="${lesson.programiz}" target="_blank">Abrir compilador online de Python →</a></p>
+        </section>
+    `;
+
+    document.getElementById("runButton").onclick = runPython;
+    document.getElementById("restoreButton").onclick = () => {
+        document.getElementById("codeEditor").value = lesson.example;
+        document.getElementById("console").textContent = "Ejemplo restaurado.";
+    };
+    document.getElementById("copyButton").onclick = async () => {
+        await navigator.clipboard.writeText(document.getElementById("codeEditor").value);
+        document.getElementById("console").textContent = "Código copiado al portapapeles.";
+    };
+    document.getElementById("completeButton").onclick = () => {
+        if (!completed.includes(index)) {
+            completed.push(index);
+            localStorage.setItem("pythonProgress", JSON.stringify(completed));
+            renderMenu();
+            document.getElementById("console").textContent = "✓ Lección marcada como completada.";
+        }
+    };
+
+    renderMenu();
+}
+
+function showChallenge(number) {
+    activateHomeButton("");
+    const challenges = {
+        1: {
+            title: "Reto 1 — Área del rectángulo",
+            text: "Pide la base y la altura de un rectángulo, calcula su área y muestra el resultado.",
+            code: `base = float(input("Ingrese la base: "))
+altura = float(input("Ingrese la altura: "))
+
+area = base * altura
+
+print("El área es:", area)`,
+            input: "10\n5"
+        },
+        2: {
+            title: "Reto 2 — ¿Aprobado o reprobado?",
+            text: "Pide una nota final. Si la nota es mayor o igual a 3.0, muestra 'Estudiante aprobado'. De lo contrario, muestra 'Estudiante reprobado'.",
+            code: `nota = float(input("Ingrese la nota final: "))
+
+if nota >= 3.0:
+    print("Estudiante aprobado")
+else:
+    print("Estudiante reprobado")`,
+            input: "3.5"
+        },
+        3: {
+            title: "Reto 3 — Contador",
+            text: "Crea un contador que comience en 0 horas, 0 minutos y 0 segundos. Cada segundo debe aumentar el contador y los segundos y minutos deben reiniciarse al llegar a 60.",
+            code: `horas = 0
+minutos = 0
+segundos = 0
+
+for i in range(10):
+    print(horas, ":", minutos, ":", segundos)
+
+    segundos += 1
+
+    if segundos == 60:
+        segundos = 0
+        minutos += 1
+
+    if minutos == 60:
+        minutos = 0
+        horas += 1`,
+            input: ""
+        }
+    };
+
+    const c = challenges[number];
+
+    document.getElementById("content").innerHTML = `
+        <section class="card hero">
+            <span class="badge">DESAFÍO</span>
+            <h2>${c.title}</h2>
+            <p>${c.text}</p>
+        </section>
+
+        <section class="card">
+            <h3>🧠 Antes de programar</h3>
+            <p><strong>Entrada:</strong> identifica los datos que necesita el programa.</p>
+            <p><strong>Proceso:</strong> describe las operaciones o decisiones.</p>
+            <p><strong>Salida:</strong> indica qué resultado debe mostrar.</p>
+            <p><strong>Algoritmo:</strong> escribe primero el pseudocódigo o realiza el diagrama de flujo.</p>
+        </section>
+
+        <section class="card">
+            <h3>💻 Prueba tu solución</h3>
+            <label><strong>Datos de entrada</strong></label>
+            <textarea id="inputData" class="inputs">${c.input}</textarea>
+            <br><br>
+            <textarea id="codeEditor" class="editor" spellcheck="false">${escapeHtml(c.code)}</textarea>
+            <div class="controls">
+                <button class="action success" id="runButton">▶ Ejecutar</button>
+                <button class="action secondary" id="restoreButton">↻ Restaurar código</button>
+            </div>
+            <h3>🖥️ Resultado</h3>
+            <div id="console" class="console">Presiona "Ejecutar".</div>
+        </section>
+    `;
+
+    document.getElementById("runButton").onclick = runPython;
+    document.getElementById("restoreButton").onclick = () => {
+        document.getElementById("codeEditor").value = c.code;
+    };
+}
+
+function escapeHtml(text) {
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+}
+
+let pyodide = null;
+
+async function loadPython() {
+    if (pyodide) return pyodide;
+
+    const consoleBox = document.getElementById("console");
+    consoleBox.textContent = "Cargando Python en el navegador...";
+
+    try {
+        const { loadPyodide } = await import(
+            "https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.mjs"
+        );
+        pyodide = await loadPyodide();
+        return pyodide;
+    } catch (error) {
+        throw new Error("No se pudo cargar Python. Revisa tu conexión a Internet.");
+    }
+}
+
+async function runPython() {
+    const consoleBox = document.getElementById("console");
+    const code = document.getElementById("codeEditor").value;
+    const rawInputs = document.getElementById("inputData").value;
+    const inputs = rawInputs.split(/\r?\n/);
+    let inputIndex = 0;
+
+    consoleBox.textContent = "Ejecutando...";
+
+    try {
+        const python = await loadPython();
+
+        python.setStdout({
+            batched: (text) => {
+                consoleBox.textContent += text;
+            }
+        });
+
+        python.setStderr({
+            batched: (text) => {
+                consoleBox.textContent += text;
+            }
+        });
+
+        python.setStdin({
+            stdin: () => {
+                if (inputIndex < inputs.length) return inputs[inputIndex++];
+                return prompt("Python necesita un dato de entrada:") ?? "";
+            }
+        });
+
+        consoleBox.textContent = "";
+        await python.runPythonAsync(code);
+
+    } catch (error) {
+        consoleBox.textContent = "❌ Error:\n" + error.message;
+    }
+}
+
+showHome();
+
+</script>
+</body>
+</html>
